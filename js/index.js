@@ -1,3 +1,4 @@
+// Somarthok shobdo button akare dekhano
 const creatElementForSynonyms = (arr) => {
     const htmlElement = arr.map((el) => `<span class="btn">${el}</span>`);
     return htmlElement.join(" ")
@@ -20,6 +21,7 @@ const manageSpinner = (status) => {
         document.getElementById("word-container").classList.remove("hidden")
     }
 }
+// call api for levels button
 const loadData = () => {
     fetch("https://openapi.programming-hero.com/api/levels/all")
     .then(rec => rec.json())
@@ -31,7 +33,7 @@ const  lessonBtnCss = document.querySelectorAll(".lesson-btn")
 lessonBtnCss.forEach(btn => btn.classList.remove("active"))
 }
 
-
+//call api for words by id name
 const loadLevelWord = (id) => {
     manageSpinner(true);
     const url = `https://openapi.programming-hero.com/api/level/${id}` 
