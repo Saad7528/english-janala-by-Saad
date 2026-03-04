@@ -1,10 +1,16 @@
 const creatElementForSynonyms = (arr) => {
     const htmlElement = arr.map((el) => `<span class="btn">${el}</span>`);
     return htmlElement.join(" ")
-    
-
 }
 
+// Speek function
+function pronounceWord(word) {
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-EN"; // English
+  window.speechSynthesis.speak(utterance);
+}
+
+// Loading Status
 const manageSpinner = (status) => {
     if(status == true) {
         document.getElementById("spinner").classList.remove("hidden")
@@ -96,7 +102,7 @@ const displayLoadLevelWord = (words) =>{
           <div class="flex justify-between ">
             <button onclick="loadWordDetail(${word.id})" class="btn hover:bg-[#1A91FF20] p-2 rounded-sm"><i  class=" text-gray-600 fa-solid fa-circle-info"></i></button>
 
-          <button class="btn hover:bg-[#1A91FF20] p-2 rounded-sm"><i class="text-gray-600 fa-solid fa-volume-high"></i></button>
+          <button onclick="pronounceWord('${word.word}')" class="btn hover:bg-[#1A91FF20] p-2 rounded-sm"><i class="text-gray-600 fa-solid fa-volume-high"></i></button>
 
         </div>
         `;
@@ -123,3 +129,29 @@ const display = (data) => {
 }
 
 loadData();
+
+
+// Search function
+// search when press enter key
+const searchInput = document.getElementById('search-input');
+searchInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+        document.getElementById('btn-search').click();
+    }
+});
+// 'Search When Click search
+document.getElementById("btn-search").addEventListener('click', () => {
+    removeActive();
+    const input = document.getElementById('search-input')
+    searchValue = input.value.trim().toLowerCase();
+    console.log(searchValue)
+
+    fetch('https://openapi.programming-hero.com/api/words/all')
+    .then(res => res.json())
+    .then(data => {
+        const allwords = data.data;
+        console.log(allwords);
+        const filterWord = allwords.filter(word => word.word.toLowerCase().includes(searchValue))
+        displayLoadLevelWord(filterWord)
+    })
+})
